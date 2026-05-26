@@ -1,0 +1,15 @@
+provider "aws"{
+    region = "us-east-1"
+}
+
+resource "aws_instance" "myinstance"{
+    ami = "ami-0236922087fa98b6e"
+    subnet_id = "subnet-06c2abdb3ecac2783"
+    instance_type ="t2.micro"
+    vpc_security_group_ids = ["sg-04fd8cdb4e870e8c5"]
+
+
+    tags={
+      "Terraform" = "Instance"
+    }
+}
