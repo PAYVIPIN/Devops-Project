@@ -1,25 +1,40 @@
 pipeline{
     agent {label 'Jenkin-agent'}
 
+    tools{
+        jdk
+        maven
+    }
+
     stages{
         stage ("Cleanup Workspace"){
-            step{
+            steps{
                 cleanWs()
             }
         }
         stage ("Checkout from SCM"){
-            step{
-                git branch "main" credentiald "" url ""
+            steps{
+                git branch: 'main' credentialsId: '' url: ''
             }
         }
         stage ("Build the application"){
-            step{
-                sh "mvn clean package"
+            steps{
+                sh 'mvn clean package'
             }
         }
         stage ("Test the application"){
-            step{
-                sh "mvn test"
+            steps{
+                sh 'mvn test'
+            }
+        }
+        stage ("Sonarqube Analysis"){
+            steps{
+                script{
+                    withSonarQubeEnv(credentialId: ''){
+                        sh 'mvn sonar:sonar'
+                    }
+
+                }
             }
         }
     }
